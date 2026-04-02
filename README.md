@@ -134,3 +134,9 @@ VITE_API_URL="http://localhost:3000"
 ## 📄 Licença
 
 Este projeto está licenciado sob os termos da licença MIT. Consulte o arquivo [LICENSE](./LICENSE) para mais detalhes.
+
+---
+
+## 🤖 Desenvolvido com Antigravity
+
+Este projeto foi desenvolvido com o auxílio do **[Antigravity](https://antigravity.dev)**, o assistente de programação por IA da Google DeepMind. O Antigravity foi utilizado ao longo de todo o ciclo de desenvolvimento — desde a criação da arquitetura e configuração do ambiente, até a implementação das funcionalidades, integração de APIs e refinamento do código — acelerando significativamente o processo de desenvolvimento sem abrir mão da qualidade e das boas práticas de engenharia de software.
