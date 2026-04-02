@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Stylish&display=swap');
+
+:root {
+  --bg-base: #09090b;
+  --bg-surface: #18181b;
+  --bg-surface-hover: #27272a;
+  
+  --text-base: #ffffff;
+  --text-muted: #a1a1aa;
+  
+  --primary: #9d4edd; /* Vibrant Purple */
+  --primary-light: #c77dff; /* Lighter Purple */
+  --primary-dark: #5a189a; /* Darker Purple for contrast */
+  
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  
+  --shadow-glow: 0 4px 20px rgba(157, 78, 221, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  transition: all 0.2s ease-in-out;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+.mobile-container {
+  max-width: 414px; /* iPhone Max width approx */
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--bg-base);
+  position: relative;
+  overflow-x: hidden;
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+}
+
+.glass-panel {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+}
+
+/* Scrollbar styling for a cleaner look */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}

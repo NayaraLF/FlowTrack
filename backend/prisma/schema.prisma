@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  name             String?
+  password         String?
+  googleTokens     String?   // Storing OAuth tokens as stringified JSON
+  
+  // Personal Info
+  age              Int?
+  weight           Float?
+  height           Float?
+  trainingType     String?
+  profileCompleted Boolean   @default(false)
+  
+  workouts         Workout[]
+  trainingPlans    TrainingPlan[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model Workout {
+  id              String           @id @default(uuid())
+  userId          String
+  user            User             @relation(fields: [userId], references: [id])
+  title           String
+  type            String           // e.g., 'GYM', 'RUNNING', 'WALKING', 'CYCLING', 'MARTIAL_ARTS'
+  date            DateTime
+  notes           String?
+  calendarEventId String?          // Google Calendar event ID
+  exercises       ExerciseRecord[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model ExerciseRecord {
+  id          String   @id @default(uuid())
+  workoutId   String
+  workout     Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  
+  // Fields for GYM (Strength Training)
+  name        String?  // e.g., 'Bench Press'
+  sets        Int?
+  reps        Int?
+  weight      Float?
+  
+  // Fields for Cardio (Running, Walking, Cycling)
+  distance    Float?   // in km
+  duration    Int?     // in minutes
+  pace        String?  // e.g., '5:30' (min/km)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TrainingPlan {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String    // e.g., "Plano Hipertrofia 2024"
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  routines  Routine[]
+}
+
+model Routine {
+  id             String            @id @default(uuid())
+  trainingPlanId String
+  trainingPlan   TrainingPlan      @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
+  name           String            // e.g., "TREINO A"
+  targetGroup    String            // e.g., "Bíceps e Costas"
+  exercises      RoutineExercise[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+model RoutineExercise {
+  id          String   @id @default(uuid())
+  routineId   String
+  routine     Routine  @relation(fields: [routineId], references: [id], onDelete: Cascade)
+  exercise    String   // e.g., "Remada baixa triângulo"
+  sets        String   // e.g., "3x"
+  reps        String   // e.g., "12 a 15"
+  load        String?  // e.g., "50kg"
+  observation String?  // e.g., "Bi set"
+  order       Int      @default(0) // Order of exercise in the routine
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
