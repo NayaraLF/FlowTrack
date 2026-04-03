@@ -30,7 +30,7 @@ class AuthController {
       });
 
       const token = generateToken(user);
-      return res.status(201).json({ token, user: { id: user.id, name: user.name, email: user.email, profileCompleted: user.profileCompleted } });
+      return res.status(201).json({ token, user: { id: user.id, name: user.name, email: user.email, profileCompleted: user.profileCompleted, gender: user.gender, weight: user.weight, targetWeight: user.targetWeight, height: user.height, age: user.age, trainingType: user.trainingType } });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ error: 'Internal server error' });
@@ -51,7 +51,7 @@ class AuthController {
       }
 
       const token = generateToken(user);
-      return res.status(200).json({ token, user: { id: user.id, name: user.name, email: user.email, profileCompleted: user.profileCompleted } });
+      return res.status(200).json({ token, user: { id: user.id, name: user.name, email: user.email, profileCompleted: user.profileCompleted, gender: user.gender, weight: user.weight, targetWeight: user.targetWeight, height: user.height, age: user.age, trainingType: user.trainingType } });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ error: 'Internal server error' });
@@ -83,7 +83,7 @@ class AuthController {
       }
 
       const token = generateToken(user);
-      return res.status(200).json({ token, user: { id: user.id, name: user.name, email: user.email, profileCompleted: user.profileCompleted } });
+      return res.status(200).json({ token, user: { id: user.id, name: user.name, email: user.email, profileCompleted: user.profileCompleted, gender: user.gender, weight: user.weight, targetWeight: user.targetWeight, height: user.height, age: user.age, trainingType: user.trainingType } });
     } catch (e) {
       console.error("Google verify error details:");
       console.error(e);

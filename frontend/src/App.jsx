@@ -3,6 +3,9 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProfileSetup from './pages/ProfileSetup';
+import TrainingPlan from './pages/TrainingPlan';
+import LogCardio from './pages/LogCardio';
+import LogMartialArts from './pages/LogMartialArts';
 import './App.css';
 
 const ProtectedRoute = ({ children, requireProfile = true }) => {
@@ -37,6 +40,30 @@ function App() {
           element={
             <ProtectedRoute requireProfile={false}>
               <ProfileSetup />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/plano-de-treino" 
+          element={
+            <ProtectedRoute requireProfile={true}>
+              <TrainingPlan />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/log-cardio" 
+          element={
+            <ProtectedRoute requireProfile={true}>
+              <LogCardio />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/log-martial-arts" 
+          element={
+            <ProtectedRoute requireProfile={true}>
+              <LogMartialArts />
             </ProtectedRoute>
           } 
         />

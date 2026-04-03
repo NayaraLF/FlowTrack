@@ -4,19 +4,16 @@ const GoogleCalendarService = require('../services/GoogleCalendarService');
 class WorkoutController {
   async createWorkout(req, res) {
     try {
-      const { userId, title, type, date, notes, exercises } = req.body;
+      const { title, type, date, notes, exercises } = req.body;
+      const userId = req.userId;
 
-      // Note: for a real app, user creation would happen during auth.
-      // Here we will lazily create or fetch a mock user since we don't have full auth wired.
-      let user = await prisma.user.findFirst({ where: { id: userId } });
+      if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      let user = await prisma.user.findUnique({ where: { id: userId } });
       if (!user) {
-        user = await prisma.user.create({
-          data: {
-            id: userId || undefined,
-            email: 'test@example.com',
-            name: 'Test User'
-          }
-        });
+         return res.status(404).json({ error: 'User not found' });
       }
 
       // Create workout with nested exercises

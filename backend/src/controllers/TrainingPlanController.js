@@ -72,7 +72,7 @@ class TrainingPlanController {
       return res.status(200).json(newPlan);
     } catch (error) {
       console.error('Error saving training plan:', error);
-      return res.status(500).json({ error: 'Erro ao salvar plano de treino.' });
+      return res.status(500).json({ error: error.message || 'Erro ao salvar plano de treino.' });
     }
   }
 }

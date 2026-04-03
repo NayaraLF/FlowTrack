@@ -1,20 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Dumbbell, CalendarDays, Activity } from 'lucide-react';
 import CaloriesChart from '../components/CaloriesChart';
 import WeightChart from '../components/WeightChart';
-import WorkoutFormModal from '../components/WorkoutFormModal';
+import SidebarMenu from '../components/SidebarMenu';
 
 const Dashboard = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isLoadingGym, setIsLoadingGym] = useState(false);
   const [user, setUser] = useState({});
 
-  useEffect(() => {
+  const loadUser = () => {
     const userStr = localStorage.getItem('user');
     if (userStr) {
       setUser(JSON.parse(userStr));
     }
+  };
+
+  useEffect(() => {
+    loadUser();
+    window.addEventListener('profileUpdated', loadUser);
+    return () => window.removeEventListener('profileUpdated', loadUser);
   }, []);
+
+  const logGymWorkout = async () => {
+    setIsLoadingGym(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('http://localhost:3001/api/workouts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          title: 'Treino de Musculação',
+          type: 'GYM',
+          date: new Date().toISOString(),
+          notes: 'Registrado pelo atalho rápido do Dashboard',
+          exercises: []
+        })
+      });
+
+      if (!res.ok) throw new Error('Falha ao registrar treino');
+      
+      alert('Treino registrado com sucesso! Ótimo trabalho.');
+      navigate('/plano-de-treino');
+    } catch (err) {
+      alert('Houve um erro ao registrar: ' + err.message);
+    } finally {
+      setIsLoadingGym(false);
+    }
+  };
 
   const dataAtual = new Intl.DateTimeFormat('pt-BR', { 
     day: 'numeric', 
@@ -38,7 +76,7 @@ const Dashboard = () => {
             {formatadaCapitalizada}
           </p>
         </div>
-        <button style={{ color: '#fff' }} onClick={() => setIsModalOpen(true)}>
+        <button style={{ color: '#fff' }} onClick={() => setIsSidebarOpen(true)}>
           <Menu size={24} />
         </button>
       </header>
@@ -82,13 +120,50 @@ const Dashboard = () => {
         <Link to="/plano-de-treino" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textDecoration: 'none' }}>Ver tudo &gt;</Link>
       </div>
       
-      <div style={{ 
-        background: 'linear-gradient(to right, rgba(157, 78, 221, 0.8), rgba(0,0,0,0.5)), url("https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=800&q=80")', 
-        backgroundSize: 'cover', backgroundPosition: 'center',
-        borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '3rem', minHeight: '120px',
-        display: 'flex', alignItems: 'center'
-      }}>
-        <h3 style={{ fontSize: '1.1rem', fontWeight: '700' }}>Treino de Costas<br/><span style={{ fontSize: '0.75rem', fontWeight: '400', opacity: 0.8 }}>12 Exercícios</span></h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem' }}>
+        <button 
+          onClick={logGymWorkout}
+          disabled={isLoadingGym}
+          style={{ 
+            width: '100%', textAlign: 'left',
+            background: 'linear-gradient(to right, rgba(157, 78, 221, 0.9), rgba(0,0,0,0.7)), url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80")', 
+            backgroundSize: 'cover', backgroundPosition: 'center',
+            borderRadius: '1.5rem', padding: '1.5rem', minHeight: '100px',
+            display: 'flex', alignItems: 'center', border: 'none', color: '#fff', cursor: 'pointer'
+          }}
+        >
+          {isLoadingGym ? (
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '700' }}>Registrando...</h3>
+          ) : (
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '700' }}>Treino de Musculação<br/><span style={{ fontSize: '0.75rem', fontWeight: '400', opacity: 0.8 }}>Registrar e Visualizar Plano</span></h3>
+          )}
+        </button>
+
+        <button 
+          onClick={() => navigate('/log-cardio')}
+          style={{ 
+            width: '100%', textAlign: 'left',
+            background: 'linear-gradient(to right, rgba(108, 43, 217, 0.85), rgba(0,0,0,0.75)), url("https://images.unsplash.com/photo-1461896836934-ffe607fa8211?auto=format&fit=crop&w=800&q=80")', 
+            backgroundSize: 'cover', backgroundPosition: 'center',
+            borderRadius: '1.5rem', padding: '1.5rem', minHeight: '100px',
+            display: 'flex', alignItems: 'center', border: 'none', color: '#fff', cursor: 'pointer'
+          }}
+        >
+          <h3 style={{ fontSize: '1.1rem', fontWeight: '700' }}>Cardio (Corrida/Ciclismo)<br/><span style={{ fontSize: '0.75rem', fontWeight: '400', opacity: 0.8 }}>Registrar Tempo e Distância</span></h3>
+        </button>
+
+        <button 
+          onClick={() => navigate('/log-martial-arts')}
+          style={{ 
+            width: '100%', textAlign: 'left',
+            background: 'linear-gradient(to right, rgba(74, 20, 140, 0.9), rgba(0,0,0,0.8)), url("https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80")', 
+            backgroundSize: 'cover', backgroundPosition: 'center',
+            borderRadius: '1.5rem', padding: '1.5rem', minHeight: '100px',
+            display: 'flex', alignItems: 'center', border: 'none', color: '#fff', cursor: 'pointer'
+          }}
+        >
+          <h3 style={{ fontSize: '1.1rem', fontWeight: '700' }}>Lutas<br/><span style={{ fontSize: '0.75rem', fontWeight: '400', opacity: 0.8 }}>Registrar Intensidade e Tempo</span></h3>
+        </button>
       </div>
 
       {/* -------------------- SECTION 2: WEIGHT (SCREEN 4) -------------------- */}
@@ -99,7 +174,7 @@ const Dashboard = () => {
             {new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' }).format(new Date())}
           </p>
         </div>
-        <button style={{ color: '#fff' }} onClick={() => setIsModalOpen(true)}>
+        <button style={{ color: '#fff' }} onClick={() => setIsSidebarOpen(true)}>
           <Menu size={24} />
         </button>
       </header>
@@ -115,11 +190,11 @@ const Dashboard = () => {
             <p style={{ fontSize: '0.65rem', opacity: 0.8 }}>Peso Atual</p>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '700' }}>{user.weight ? `${(user.weight - 5).toFixed(1)} kg` : '- kg'}</h2>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: '700' }}>{user.targetWeight ? `${user.targetWeight} kg` : '- kg'}</h2>
             <p style={{ fontSize: '0.65rem', opacity: 0.8 }}>Meta de Peso</p>
           </div>
         </div>
-        <WeightChart />
+        <WeightChart currentWeight={user.weight} targetWeight={user.targetWeight} />
       </div>
 
       {/* Discover Section */}
@@ -131,7 +206,7 @@ const Dashboard = () => {
         Acompanhe seus relatórios semanais e descubra o impacto do esporte no seu bem-estar diário e na queima calórica consistente.
       </p>
 
-      <WorkoutFormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <SidebarMenu isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
     </div>
   );
 };

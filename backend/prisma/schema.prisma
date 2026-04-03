@@ -16,7 +16,9 @@ model User {
   
   // Personal Info
   age              Int?
+  gender           String?
   weight           Float?
+  targetWeight     Float?
   height           Float?
   trainingType     String?
   profileCompleted Boolean   @default(false)

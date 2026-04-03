@@ -3,7 +3,7 @@ const prisma = require('../utils/prismaClient');
 class UserController {
   async updateProfile(req, res) {
     try {
-      const { age, weight, height, trainingType } = req.body;
+      const { age, weight, targetWeight, height, trainingType, gender } = req.body;
       const userId = req.userId;
 
       if (!userId) {
@@ -15,8 +15,10 @@ class UserController {
         data: {
           age: age ? parseInt(age) : null,
           weight: weight ? parseFloat(weight) : null,
+          targetWeight: targetWeight ? parseFloat(targetWeight) : null,
           height: height ? parseFloat(height) : null,
           trainingType: trainingType || null,
+          gender: gender || null,
           profileCompleted: true
         }
       });
@@ -29,8 +31,10 @@ class UserController {
           email: updatedUser.email,
           age: updatedUser.age,
           weight: updatedUser.weight,
+          targetWeight: updatedUser.targetWeight,
           height: updatedUser.height,
           trainingType: updatedUser.trainingType,
+          gender: updatedUser.gender,
           profileCompleted: updatedUser.profileCompleted
         } 
       });

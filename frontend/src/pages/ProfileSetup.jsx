@@ -6,7 +6,9 @@ const ProfileSetup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     age: '',
+    gender: '',
     weight: '',
+    targetWeight: '',
     height: '',
     trainingType: 'Academia'
   });
@@ -47,7 +49,9 @@ const ProfileSetup = () => {
       if (userStr) {
         const user = JSON.parse(userStr);
         user.age = data.user.age;
+        user.gender = data.user.gender;
         user.weight = data.user.weight;
+        user.targetWeight = data.user.targetWeight;
         user.height = data.user.height;
         user.trainingType = data.user.trainingType;
         user.profileCompleted = true;
@@ -112,11 +116,31 @@ const ProfileSetup = () => {
                 }}
               />
             </div>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ fontSize: '0.8rem', fontWeight: '600', color: 'rgba(255,255,255,0.8)' }}>Sexo</label>
+              <select 
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                required
+                style={{ 
+                  width: '100%', padding: '0.875rem 1rem', borderRadius: '0.75rem', 
+                  border: '1px solid rgba(255,255,255,0.1)', outline: 'none',
+                  background: 'rgba(0,0,0,0.2)', color: formData.gender ? '#fff' : 'rgba(255,255,255,0.5)', fontSize: '1rem',
+                  appearance: 'none', cursor: 'pointer'
+                }}
+              >
+                <option value="" disabled style={{ color: '#000' }}>Selecione</option>
+                <option value="Masculino" style={{ color: '#000' }}>Masculino</option>
+                <option value="Feminino" style={{ color: '#000' }}>Feminino</option>
+                <option value="Outro" style={{ color: '#000' }}>Outro</option>
+              </select>
+            </div>
           </div>
 
           <div style={{ display: 'flex', gap: '1rem' }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label style={{ fontSize: '0.8rem', fontWeight: '600', color: 'rgba(255,255,255,0.8)' }}>Peso (kg)</label>
+              <label style={{ fontSize: '0.8rem', fontWeight: '600', color: 'rgba(255,255,255,0.8)' }}>Peso Atual (kg)</label>
               <input 
                 type="number" 
                 name="weight"
@@ -132,6 +156,25 @@ const ProfileSetup = () => {
                 }}
               />
             </div>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ fontSize: '0.8rem', fontWeight: '600', color: '#c77dff' }}>Meta de Peso (kg)</label>
+              <input 
+                type="number" 
+                name="targetWeight"
+                placeholder="Ex: 70.0"
+                step="0.1"
+                value={formData.targetWeight}
+                onChange={handleChange}
+                style={{ 
+                  width: '100%', padding: '0.875rem 1rem', borderRadius: '0.75rem', 
+                  border: '1px solid rgba(157, 78, 221, 0.5)', outline: 'none',
+                  background: 'rgba(157, 78, 221, 0.1)', color: '#fff', fontSize: '1rem'
+                }}
+              />
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '1rem' }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <label style={{ fontSize: '0.8rem', fontWeight: '600', color: 'rgba(255,255,255,0.8)' }}>Altura (cm)</label>
               <input 
