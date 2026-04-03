@@ -52,7 +52,11 @@ class WorkoutController {
 
   async getAllWorkouts(req, res) {
     try {
+      const userId = req.userId;
+      if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
       const workouts = await prisma.workout.findMany({
+        where: { userId },
         include: { exercises: true },
         orderBy: { date: 'desc' }
       });

@@ -6,6 +6,7 @@ import ProfileSetup from './pages/ProfileSetup';
 import TrainingPlan from './pages/TrainingPlan';
 import LogCardio from './pages/LogCardio';
 import LogMartialArts from './pages/LogMartialArts';
+import WorkoutHistory from './pages/WorkoutHistory';
 import './App.css';
 
 const ProtectedRoute = ({ children, requireProfile = true }) => {
@@ -64,6 +65,14 @@ function App() {
           element={
             <ProtectedRoute requireProfile={true}>
               <LogMartialArts />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/historico" 
+          element={
+            <ProtectedRoute requireProfile={true}>
+              <WorkoutHistory />
             </ProtectedRoute>
           } 
         />

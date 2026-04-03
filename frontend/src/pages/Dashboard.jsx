@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Dumbbell, CalendarDays, Activity } from 'lucide-react';
-import CaloriesChart from '../components/CaloriesChart';
+import ActivityChart from '../components/ActivityChart';
 import WeightChart from '../components/WeightChart';
 import SidebarMenu from '../components/SidebarMenu';
 
@@ -102,16 +102,15 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Calories Chart */}
+      {/* Activity Chart */}
       <div style={{ background: 'var(--primary)', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <h2 style={{ fontSize: '1.1rem', fontWeight: '700', letterSpacing: '1px' }}>CALORIAS</h2>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: '700', letterSpacing: '1px' }}>ATIVIDADES</h2>
           <div style={{ textAlign: 'right' }}>
-            <p style={{ fontSize: '0.65rem', opacity: 0.8 }}>Média Semanal</p>
-            <p style={{ fontSize: '1rem', fontWeight: '700' }}>112 KCAL</p>
+            <p style={{ fontSize: '0.65rem', opacity: 0.8 }}>Esta semana</p>
           </div>
         </div>
-        <CaloriesChart />
+        <ActivityChart />
       </div>
 
       {/* Personalized Plan */}

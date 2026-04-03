@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, User, LogOut, ArrowLeft, Save } from 'lucide-react';
+import { X, User, LogOut, ArrowLeft, Save, History } from 'lucide-react';
 
 const SidebarMenu = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
@@ -137,6 +137,18 @@ const SidebarMenu = ({ isOpen, onClose }) => {
           
           {view === 'menu' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {/* Histórico de Treinos */}
+              <button 
+                onClick={() => { onClose(); navigate('/historico'); }}
+                style={{ background: 'var(--bg-surface-hover)', padding: '1rem', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '1rem', color: '#fff', fontSize: '1.05rem', fontWeight: '600' }}
+              >
+                <div style={{ background: 'rgba(157, 78, 221, 0.2)', padding: '8px', borderRadius: '8px', color: 'var(--primary-light)' }}>
+                  <History size={24} />
+                </div>
+                Histórico de Treinos
+              </button>
+
+              {/* Dados Pessoais */}
               <button 
                 onClick={() => setView('profile')}
                 style={{ background: 'var(--bg-surface-hover)', padding: '1rem', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '1rem', color: '#fff', fontSize: '1.05rem', fontWeight: '600' }}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Trash2, Save, ArrowLeft } from 'lucide-react';
+import { Plus, Trash2, Save, ArrowLeft, CheckCircle } from 'lucide-react';
 
 const gymExercises = [
   // Peito
@@ -34,6 +34,36 @@ const TrainingPlan = () => {
   ]);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [isLoggingWorkout, setIsLoggingWorkout] = useState(false);
+  const [workoutLogged, setWorkoutLogged] = useState(false);
+
+  const logTodayWorkout = async () => {
+    setIsLoggingWorkout(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('http://localhost:3001/api/workouts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title: title || 'Treino de Musculação',
+          type: 'GYM',
+          date: new Date().toISOString(),
+          notes: 'Registrado pela página de Plano de Treino',
+          exercises: [],
+        }),
+      });
+      if (!res.ok) throw new Error('Erro ao registrar');
+      setWorkoutLogged(true);
+      setTimeout(() => setWorkoutLogged(false), 4000);
+    } catch (e) {
+      setError('Falha ao registrar treino: ' + e.message);
+    } finally {
+      setIsLoggingWorkout(false);
+    }
+  };
 
   useEffect(() => {
     fetchPlan();
@@ -163,6 +193,46 @@ const TrainingPlan = () => {
           {title}
         </h1>
         <div style={{ width: 24 }}></div>
+      </div>
+
+      {/* Register Today's Workout Banner */}
+      <div style={{
+        background: workoutLogged
+          ? 'linear-gradient(to right, rgba(34,197,94,0.25), rgba(0,0,0,0.5))'
+          : 'linear-gradient(to right, rgba(108,43,217,0.85), rgba(0,0,0,0.7)), url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80")',
+        backgroundSize: 'cover', backgroundPosition: 'center',
+        borderRadius: '1.25rem', padding: '1.25rem 1.5rem',
+        marginBottom: '2rem',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        border: workoutLogged ? '1px solid rgba(34,197,94,0.5)' : 'none',
+        transition: 'all 0.4s ease'
+      }}>
+        <div>
+          <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.2rem' }}>
+            {workoutLogged ? '✅ Registrado!' : 'Treino de hoje'}
+          </p>
+          <h3 style={{ fontSize: '1rem', fontWeight: '700', margin: 0 }}>
+            {workoutLogged ? 'Treino marcado no histórico' : 'Realizou o treino hoje?'}
+          </h3>
+        </div>
+        {!workoutLogged && (
+          <button
+            onClick={logTodayWorkout}
+            disabled={isLoggingWorkout}
+            style={{
+              background: 'rgba(255,255,255,0.15)',
+              border: '1px solid rgba(255,255,255,0.4)',
+              color: '#fff', fontWeight: '700', fontSize: '0.85rem',
+              padding: '0.6rem 1.1rem', borderRadius: '0.75rem',
+              cursor: isLoggingWorkout ? 'not-allowed' : 'pointer',
+              backdropFilter: 'blur(4px)', whiteSpace: 'nowrap',
+              opacity: isLoggingWorkout ? 0.6 : 1
+            }}
+          >
+            {isLoggingWorkout ? 'Registrando...' : '✓ Feito!'}
+          </button>
+        )}
+        {workoutLogged && <CheckCircle size={32} color="#4ade80" />}
       </div>
 
       <div>
