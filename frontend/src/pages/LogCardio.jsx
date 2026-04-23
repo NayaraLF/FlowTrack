@@ -45,7 +45,7 @@ const LogCardio = () => {
     setError(null);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3001/api/workouts', {
+      const res = await fetch('/api/workouts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

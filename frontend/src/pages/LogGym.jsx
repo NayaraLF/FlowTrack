@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Timer, Activity } from 'lucide-react';
+import { ArrowLeft, Timer, FileText, Dumbbell } from 'lucide-react';
 
 const inputStyle = {
   width: '100%',
@@ -24,19 +24,12 @@ const labelStyle = {
   marginBottom: '0.5rem',
 };
 
-const INTENSIDADES = [
-  { key: 'leve', label: '😌 Leve' },
-  { key: 'moderado', label: '💪 Moderado' },
-  { key: 'intenso', label: '🔥 Intenso' },
-  { key: 'muito_intenso', label: '⚡ Muito Intenso' },
-];
-
-const LogMartialArts = () => {
+const LogGym = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     duration: '',
-    intensity: 'moderado',
+    notes: '',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -51,8 +44,6 @@ const LogMartialArts = () => {
     setError(null);
     try {
       const token = localStorage.getItem('token');
-      const formattedIntensity = INTENSIDADES.find((i) => i.key === formData.intensity)?.label || formData.intensity;
-
       const res = await fetch('/api/workouts', {
         method: 'POST',
         headers: {
@@ -60,15 +51,15 @@ const LogMartialArts = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          title: 'Artes Marciais / Lutas',
-          type: 'MARTIAL_ARTS',
+          title: 'Treino de Musculação',
+          type: 'GYM',
           date: (() => { const d = new Date(formData.date + 'T12:00:00'); return d.toISOString(); })(),
-          notes: `Tempo: ${formData.duration} min | Intensidade: ${formattedIntensity}`,
+          notes: formData.notes ? `Tempo: ${formData.duration} min | Foco: ${formData.notes}` : `Tempo: ${formData.duration} min`,
           exercises: [],
         }),
       });
 
-      if (!res.ok) throw new Error('Falha ao salvar registro de lutas.');
+      if (!res.ok) throw new Error('Falha ao salvar registro de musculação.');
       navigate('/');
     } catch (err) {
       setError(err.message);
@@ -90,7 +81,7 @@ const LogMartialArts = () => {
         flexDirection: 'column',
       }}
     >
-      {/* Header hero */}
+      {/* Header with hero image */}
       <div
         style={{
           position: 'relative',
@@ -99,7 +90,7 @@ const LogMartialArts = () => {
           marginBottom: '2rem',
           minHeight: '160px',
           background:
-            'linear-gradient(to right, rgba(74, 20, 140, 0.95), rgba(0,0,0,0.8)), url("https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80")',
+            'linear-gradient(to right, rgba(157, 78, 221, 0.9), rgba(0,0,0,0.7)), url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           display: 'flex',
@@ -122,6 +113,8 @@ const LogMartialArts = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            border: 'none',
+            cursor: 'pointer'
           }}
         >
           <ArrowLeft size={20} />
@@ -129,7 +122,7 @@ const LogMartialArts = () => {
         <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
           Log de Atividade
         </p>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: '800', margin: 0 }}>Lutas</h1>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: '800', margin: 0 }}>Musculação</h1>
       </div>
 
       {error && (
@@ -160,6 +153,14 @@ const LogMartialArts = () => {
         }}
       >
         <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          
+          {/* Foco de Treino / Título Simples */}
+          <div>
+            <label style={labelStyle}><Dumbbell size={15} /> Atividade</label>
+            <div style={{ padding: '1rem', borderRadius: '0.75rem', background: 'rgba(157, 78, 221, 0.25)', border: '1px solid #9d4edd', color: '#c77dff', fontWeight: '700', fontSize: '0.9rem', textAlign: 'center' }}>
+              🏋️ Treino de Musculação
+            </div>
+          </div>
 
           {/* Data */}
           <div>
@@ -169,7 +170,7 @@ const LogMartialArts = () => {
 
           {/* Tempo */}
           <div>
-            <label style={labelStyle}><Timer size={15} /> Tempo Total (minutos)</label>
+            <label style={labelStyle}><Timer size={15} /> Tempo de Treino (minutos)</label>
             <input
               type="number"
               name="duration"
@@ -182,35 +183,17 @@ const LogMartialArts = () => {
             />
           </div>
 
-          {/* Intensidade */}
+          {/* Anotações/Foco */}
           <div>
-            <label style={labelStyle}><Activity size={15} /> Intensidade (Percepção de Esforço)</label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-              {INTENSIDADES.map(({ key, label }) => {
-                const active = formData.intensity === key;
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, intensity: key })}
-                    style={{
-                      padding: '0.875rem',
-                      borderRadius: '0.75rem',
-                      background: active ? 'rgba(157, 78, 221, 0.25)' : 'rgba(0,0,0,0.2)',
-                      border: active ? '1px solid #9d4edd' : '1px solid rgba(255,255,255,0.1)',
-                      color: active ? '#c77dff' : 'rgba(255,255,255,0.6)',
-                      fontWeight: '700',
-                      fontSize: '0.85rem',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      textAlign: 'center',
-                    }}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
+            <label style={labelStyle}><FileText size={15} /> Foco / Anotações</label>
+            <input
+              type="text"
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              placeholder="Ex: Peito e Tríceps"
+              style={inputStyle}
+            />
           </div>
 
           <button
@@ -231,7 +214,7 @@ const LogMartialArts = () => {
               cursor: isLoading ? 'not-allowed' : 'pointer',
             }}
           >
-            {isLoading ? 'Salvando...' : 'Salvar Atividade'}
+            {isLoading ? 'Salvando...' : 'Salvar Treino'}
           </button>
         </form>
       </div>
@@ -239,4 +222,4 @@ const LogMartialArts = () => {
   );
 };
 
-export default LogMartialArts;
+export default LogGym;

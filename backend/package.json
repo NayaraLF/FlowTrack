@@ -4,7 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --runInBand",
+    "postinstall": "prisma generate"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/__tests__/**/*.test.js"],
+    "modulePathIgnorePatterns": ["<rootDir>/node_modules/"]
   },
   "keywords": [],
   "author": "",
@@ -22,6 +30,7 @@
     "pg": "^8.20.0"
   },
   "devDependencies": {
+    "jest": "^30.3.0",
     "nodemon": "^3.1.14",
     "prisma": "^6.19.3"
   }

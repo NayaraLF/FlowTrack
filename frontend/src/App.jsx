@@ -6,6 +6,7 @@ import ProfileSetup from './pages/ProfileSetup';
 import TrainingPlan from './pages/TrainingPlan';
 import LogCardio from './pages/LogCardio';
 import LogMartialArts from './pages/LogMartialArts';
+import LogGym from './pages/LogGym';
 import WorkoutHistory from './pages/WorkoutHistory';
 import './App.css';
 
@@ -49,6 +50,14 @@ function App() {
           element={
             <ProtectedRoute requireProfile={true}>
               <TrainingPlan />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/log-gym" 
+          element={
+            <ProtectedRoute requireProfile={true}>
+              <LogGym />
             </ProtectedRoute>
           } 
         />

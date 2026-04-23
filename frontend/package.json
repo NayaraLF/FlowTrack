@@ -7,7 +7,22 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "jest"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "testMatch": ["**/__tests__/**/*.test.{js,jsx}"],
+    "transform": {
+      "^.+\\.[jt]sx?$": "babel-jest"
+    },
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+      "\\.(gif|png|jpg|jpeg|svg|webp)$": "<rootDir>/src/__tests__/__mocks__/fileMock.cjs"
+    },
+    "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json", "node"],
+    "setupFiles": ["<rootDir>/jest.setup.cjs"],
+    "setupFilesAfterEnv": ["@testing-library/jest-dom"]
   },
   "dependencies": {
     "@react-oauth/google": "^0.13.4",
@@ -18,14 +33,24 @@
     "recharts": "^3.8.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.2",
+    "@babel/preset-react": "^7.28.5",
     "@eslint/js": "^9.39.4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "babel-jest": "^30.3.0",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.3.0",
+    "jest-environment-jsdom": "^30.3.0",
     "vite": "^8.0.1"
   }
 }

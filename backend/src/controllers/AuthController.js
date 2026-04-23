@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-bioflow-dev-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-flowtrack-dev-key';
 // Don't crash if env var is missing, just won't be able to verify
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || 'mock-client-id');
 

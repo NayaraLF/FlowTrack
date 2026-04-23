@@ -55,7 +55,7 @@ const SidebarMenu = ({ isOpen, onClose }) => {
     setSuccess(false);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3001/api/users/profile', {
+      const res = await fetch('/api/users/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

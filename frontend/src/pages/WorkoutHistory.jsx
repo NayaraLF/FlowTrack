@@ -28,7 +28,7 @@ const WorkoutHistory = () => {
     const fetchWorkouts = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:3001/api/workouts', {
+        const res = await fetch('/api/workouts', {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('Falha ao buscar histórico');

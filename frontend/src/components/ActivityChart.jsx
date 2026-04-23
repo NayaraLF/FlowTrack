@@ -63,7 +63,7 @@ const ActivityChart = () => {
         const token = localStorage.getItem('token');
         if (!token) return;
 
-        const res = await fetch('http://localhost:3001/api/workouts', {
+        const res = await fetch('/api/workouts', {
           headers: { Authorization: `Bearer ${token}` },
         });
 

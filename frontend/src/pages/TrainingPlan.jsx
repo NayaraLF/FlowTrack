@@ -41,7 +41,7 @@ const TrainingPlan = () => {
     setIsLoggingWorkout(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3001/api/workouts', {
+      const res = await fetch('/api/workouts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ const TrainingPlan = () => {
   const fetchPlan = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3001/api/training-plans', {
+      const res = await fetch('/api/training-plans', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -96,7 +96,7 @@ const TrainingPlan = () => {
     setError(null);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3001/api/training-plans', {
+      const res = await fetch('/api/training-plans', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

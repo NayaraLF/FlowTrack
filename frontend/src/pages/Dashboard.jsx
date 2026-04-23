@@ -24,36 +24,6 @@ const Dashboard = () => {
     return () => window.removeEventListener('profileUpdated', loadUser);
   }, []);
 
-  const logGymWorkout = async () => {
-    setIsLoadingGym(true);
-    try {
-      const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3001/api/workouts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          title: 'Treino de Musculação',
-          type: 'GYM',
-          date: new Date().toISOString(),
-          notes: 'Registrado pelo atalho rápido do Dashboard',
-          exercises: []
-        })
-      });
-
-      if (!res.ok) throw new Error('Falha ao registrar treino');
-      
-      alert('Treino registrado com sucesso! Ótimo trabalho.');
-      navigate('/plano-de-treino');
-    } catch (err) {
-      alert('Houve um erro ao registrar: ' + err.message);
-    } finally {
-      setIsLoadingGym(false);
-    }
-  };
-
   const dataAtual = new Intl.DateTimeFormat('pt-BR', { 
     day: 'numeric', 
     month: 'long', 
@@ -121,8 +91,7 @@ const Dashboard = () => {
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem' }}>
         <button 
-          onClick={logGymWorkout}
-          disabled={isLoadingGym}
+          onClick={() => navigate('/log-gym')}
           style={{ 
             width: '100%', textAlign: 'left',
             background: 'linear-gradient(to right, rgba(157, 78, 221, 0.9), rgba(0,0,0,0.7)), url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80")', 
@@ -131,11 +100,7 @@ const Dashboard = () => {
             display: 'flex', alignItems: 'center', border: 'none', color: '#fff', cursor: 'pointer'
           }}
         >
-          {isLoadingGym ? (
-            <h3 style={{ fontSize: '1.1rem', fontWeight: '700' }}>Registrando...</h3>
-          ) : (
-            <h3 style={{ fontSize: '1.1rem', fontWeight: '700' }}>Treino de Musculação<br/><span style={{ fontSize: '0.75rem', fontWeight: '400', opacity: 0.8 }}>Registrar e Visualizar Plano</span></h3>
-          )}
+          <h3 style={{ fontSize: '1.1rem', fontWeight: '700' }}>Treino de Musculação<br/><span style={{ fontSize: '0.75rem', fontWeight: '400', opacity: 0.8 }}>Registrar Tempo e Foco</span></h3>
         </button>
 
         <button 
