@@ -44,9 +44,9 @@ O **FlowTrack** é uma plataforma web focada em oferecer uma experiência comple
 
 | Tecnologia | Versão | Descrição |
 |---|---|---|
-| **PostgreSQL** | 15 | Sistema de gerenciamento de banco de dados relacional robusto e open source, responsável pela persistência de todos os dados da aplicação |
-| **Docker** | — | Plataforma de containerização que empacota o PostgreSQL em um ambiente isolado, reproduzível e independente do sistema operacional |
-| **Docker Compose** | 3.8 | Ferramenta de orquestração de containers que define e gerencia o serviço de banco de dados com um único comando |
+| **PostgreSQL / Supabase** | 15 | Banco de dados relacional para persistência de dados. Usado localmente (Docker) e em produção na nuvem via Supabase. |
+| **Docker** | — | Empacota o banco PostgreSQL local em um container isolado para ambiente de desenvolvimento. |
+| **Vercel** | — | Plataforma de hospedagem utilizada para deploy do monorepo, gerenciando o Frontend Estático e o Backend Serverless (Express) integrados via `vercel.json`. |
 
 ---
 
@@ -66,12 +66,9 @@ FlowTrack/
 ├── frontend/                 # SPA - React + Vite
 │   └── src/
 │       ├── components/       # Componentes reutilizáveis (gráficos, modais)
-│       └── pages/            # Páginas principais da aplicação
-│           ├── Login.jsx
-│           ├── Register.jsx
-│           ├── ProfileSetup.jsx
-│           └── Dashboard.jsx
-└── docker-compose.yml        # Configuração do banco de dados PostgreSQL
+│       └── pages/            # Páginas e fluxos principais (Autenticação, Dashboard, Formulários)
+├── docker-compose.yml        # Configuração do banco PostgreSQL para desenvolvimento local
+└── vercel.json               # Regras de Roteamento Serverless para produção na Vercel
 ```
 
 ---
@@ -110,6 +107,21 @@ npm run dev
 ```
 
 A aplicação estará disponível em `http://localhost:5173`.
+
+---
+
+## ☁️ Como Publicar (Deploy em Produção)
+
+O repositório já está configurado estruturalmente para um **Deploy Serverless na Vercel**:
+
+1. Crie um banco online no [Supabase](https://supabase.com).
+2. Importe o seu projeto no [Vercel](https://vercel.com).
+3. Insira as **Environment Variables** vitais no painel da Vercel (aba Settings):
+   - `DATABASE_URL` (Sua Connection String Pooler - `pgbouncer=true`)
+   - `DIRECT_URL` (Sua Connection String Direta para o Prisma subir as tabelas na nuvem)
+   - `GOOGLE_CLIENT_ID`
+   - `JWT_SECRET`
+4. A estrutura orquestrada por `backend/api/[...express].js` e `vercel.json` processará as funções de forma invisível.
 
 ---
 
