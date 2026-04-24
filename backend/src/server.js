@@ -16,15 +16,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/workouts', workoutRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/training-plans', trainingPlanRoutes);
+// Dual-mount routes: Vercel might strip or keep the '/api' prefix depending on internal routing
+const apiRouter = express.Router();
+apiRouter.use('/auth', authRoutes);
+apiRouter.use('/workouts', workoutRoutes);
+apiRouter.use('/users', userRoutes);
+apiRouter.use('/training-plans', trainingPlanRoutes);
+
+app.use('/api', apiRouter);
+app.use('/', apiRouter); // Catch stripped prefixes
 
 // Healthcheck
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date() });
+app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+
+// Catch-all 404 JSON (Prevents HTML <!DOCTYPE html> parsing errors in React)
+app.use((req, res) => {
+  res.status(404).json({ 
+    error: 'Route not found inside Express', 
+    path: req.originalUrl || req.url 
+  });
 });
 
 const PORT = process.env.PORT || 3001;
